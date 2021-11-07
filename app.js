@@ -48,6 +48,13 @@ app.use(methodOverride('_method'));
 
 
 /////////////////////////
+// EJS - Mate (modelos)
+/////////////////////////
+const ejsMate = require('ejs-mate');
+app.engine('ejs', ejsMate);
+
+
+/////////////////////////
 // Definir Rotas
 /////////////////////////
 

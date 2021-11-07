@@ -37,12 +37,19 @@ const seedDB = async () => {
 
     for (let i = 0; i < 50; i++){
         const random1000 = Math.floor(Math.random() * 1000);
-        
+        const price = Math.floor(Math.random() * 20) + 10;
+
         const camp = new Campground({
             
             location: `${cities[random1000].city} - ${cities[random1000].state}`,
             
-            title: `${sample(descriptors)} ${sample(places)}`
+            title: `${sample(descriptors)} ${sample(places)}`,
+
+            image: 'https://source.unsplash.com/collection/483251',
+
+            description: 'mply dummy text of the printing and  of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into ele',
+
+            price: price
         })
 
         await camp.save();;
