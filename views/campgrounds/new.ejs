@@ -5,36 +5,43 @@
 
         <div class="col-6 offset-3">
 
-            <form action="/campgrounds" method="post">
+            <form action="/campgrounds" method="post" novalidate class="validated-form">
+                <!-- title -->
                 <div class="mb-3">
                     <label class="form-label" for="title">Title</label>
-                    <input class="form-control" type="text" name="campground[title]" id="title">
+                    <input class="form-control" type="text" name="campground[title]" id="title" required>
                 </div>
 
+                <!-- location -->
                 <div class="mb-3">
                     <label class="form-label" for="location">Location</label>
-                    <input class="form-control" type="text" name="campground[location]" id="location">
+                    <input class="form-control" type="text" name="campground[location]" id="location" required>
                 </div>
 
+                <!-- image -->
                 <div class="mb-3">
                     <label class="form-label" for="image">Image URL</label>
-                    <input class="form-control" type="text" name="campground[image]" id="image">
+                    <input class="form-control" type="text" name="campground[image]" id="image" required>
                 </div>
 
+                <!-- price -->
                 <div class="mb-3">
                     <label class="form-label" for="price">Price</label>
                     <div class="input-group">
                         <span class="input-group-text" id="price-label">$</span>
-                        <input class="form-control" type="text" name="campground[price]" id="price" aria-describedby="price-label" placeholder="0.00">
+                        <input class="form-control" type="text" name="campground[price]" id="price"
+                            aria-describedby="price-label" placeholder="0.00" required>
                     </div>
                 </div>
 
+                <!-- description -->
                 <div class="mb-3">
                     <label class="form-label" for="description">Description</label>
                     <textarea class="form-control" type="text" name="campground[description]"
-                        id="description"></textarea>
+                        id="description" required></textarea>
                 </div>
 
+                <!-- bt submit -->
                 <div class="mb-3">
                     <button class="btn btn-success">Add Campground</button>
                 </div>
@@ -44,12 +51,5 @@
 
         </div>
     </div>
-
-
-
-
-
-
-
 
     <!-- Obs: quando eu faço name: campground[title], ele adiciona o valor dentro de um conjunto campground, tipo {campground: title: userInput, location: userInput}. Nesse caso, quando for chamar o req.body, tem que chamar o req.body.campground -->
