@@ -8,7 +8,7 @@ const Schema = mongoose.Schema;
 /////////////////////////
 // Modelos
 /////////////////////////
-const Review = require('reviews');
+const Review = require('./reviews');
 
 
 /////////////////////////
