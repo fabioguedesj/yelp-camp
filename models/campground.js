@@ -33,6 +33,7 @@ const CampgroundSchema = new Schema({
 // MiddleWare
 /////////////////////////
 // Acontece assim que deletar um Schema
+// Com isso eu deleto os reviews ligados ao camp
 CampgroundSchema.post('findOneAndDelete', async function (doc) {
     // o doc mostra o que foi deletado
     if (doc) {
