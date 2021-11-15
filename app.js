@@ -1,3 +1,9 @@
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+    // pelo que entendi isso aqui só mostra se tive em modo de desenvolvimento, ou seja, em dev ele vai mostrar pastas ocultas
+}
+
+
 /////////////////////////
 // Express
 /////////////////////////
@@ -32,7 +38,12 @@ const userRoutes = require('./routes/users');
 // Mongoose
 /////////////////////////
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/yelp-camp', {
+
+// mongodb://localhost:27017/yelp-camp
+
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
+
+mongoose.connect(dbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
@@ -44,6 +55,21 @@ db.once("open", () => {
     console.log("Database connected");
 });
 
+
+// CONECTAR COM O BANCO DELES
+const session = require('express-session'); //botei o session aqui por que precisa vir antes do MongoStore
+
+const MongoStore = require('connect-mongo');
+
+const secret = process.env.SECRET || 'istoeumsegredo';
+
+app.use(session({
+    secret,
+    store: MongoStore.create({
+        mongoUrl: dbUrl
+    }),
+    afterTouch: 24 * 60 * 60
+  }));
 
 /////////////////////////
 // EJS
@@ -69,6 +95,61 @@ app.engine('ejs', ejsMate);
 
 
 /////////////////////////
+// Helmet
+// É pra segurança também
+/////////////////////////
+const helmet = require('helmet');
+app.use(helmet());
+
+
+const scriptSrcUrls = [
+    "https://stackpath.bootstrapcdn.com/",
+    "https://api.tiles.mapbox.com/",
+    "https://api.mapbox.com/",
+    "https://kit.fontawesome.com/",
+    "https://cdnjs.cloudflare.com/",
+    "https://cdn.jsdelivr.net",
+];
+//This is the array that needs added to
+const styleSrcUrls = [
+    "https://kit-free.fontawesome.com/",
+    "https://stackpath.bootstrapcdn.com/",
+    "https://api.mapbox.com/",
+    "https://api.tiles.mapbox.com/",
+    "https://fonts.googleapis.com/",
+    "https://use.fontawesome.com/",
+    "https://cdn.jsdelivr.net",
+];
+const connectSrcUrls = [
+    "https://api.mapbox.com/",
+    "https://a.tiles.mapbox.com/",
+    "https://b.tiles.mapbox.com/",
+    "https://events.mapbox.com/",
+];
+const fontSrcUrls = [];
+app.use(
+    helmet.contentSecurityPolicy({
+        directives: {
+            defaultSrc: [],
+            connectSrc: ["'self'", ...connectSrcUrls],
+            scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+            styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+            workerSrc: ["'self'", "blob:"],
+            objectSrc: [],
+            imgSrc: [
+                "'self'",
+                "blob:",
+                "data:",
+                "https://res.cloudinary.com/fabioguedesj/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT! 
+                "https://images.unsplash.com/",
+            ],
+            fontSrc: ["'self'", ...fontSrcUrls],
+        },
+    })
+);
+
+
+/////////////////////////
 // Usar a pasta Public
 /////////////////////////
 app.use(express.static(path.join(__dirname, 'public')));
@@ -77,14 +158,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 /////////////////////////
 // Session 
 /////////////////////////
-const session = require('express-session');
 
 const sessionConfig = {
-    secret: 'exemplodesegredo',
+    name: 'session',
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
+        // secure: true, //tirar o comentário depois do deploy, porque o secure só permite https, ou seja, não funciona com localhost
         expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // Uma semana (ms)
         maxAge: 7 * 24 * 60 * 60 * 1000 // Uma semana (ms)
     }
@@ -108,6 +190,14 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
+
+/////////////////////////
+// Sanitize
+// Contra 'SQL Injection'
+/////////////////////////
+const mongoSanitize = require('express-mongo-sanitize');
+app.use(mongoSanitize());
+
 /////////////////////////
 // Flash 
 /////////////////////////
@@ -122,7 +212,7 @@ app.use((req, res, next) => {
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     res.locals.currentUser = req.user;
-    //mostra o usuario logado
+    //cria uma variavel currentUser com o usuário logado
     //tem que vir depois do passport visto que primeiro
     //precisa setar o req.user com o passport
     next();

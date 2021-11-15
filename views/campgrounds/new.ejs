@@ -3,9 +3,11 @@
     <div class="row">
         <h1 class="text-center">New Campground</h1>
 
-        <div class="col-6 offset-3">
+        <div class="col-md-6 offset-md-3">
 
-            <form action="/campgrounds" method="post" novalidate class="validated-form">
+            <form action="/campgrounds" method="post" novalidate class="validated-form" enctype="multipart/form-data">
+                <!-- o multipart é um dos passos para enviar imagens -->
+
                 <!-- title -->
                 <div class="mb-3">
                     <label class="form-label" for="title">Title</label>
@@ -16,12 +18,6 @@
                 <div class="mb-3">
                     <label class="form-label" for="location">Location</label>
                     <input class="form-control" type="text" name="campground[location]" id="location" required>
-                </div>
-
-                <!-- image -->
-                <div class="mb-3">
-                    <label class="form-label" for="image">Image URL</label>
-                    <input class="form-control" type="text" name="campground[image]" id="image" required>
                 </div>
 
                 <!-- price -->
@@ -37,8 +33,15 @@
                 <!-- description -->
                 <div class="mb-3">
                     <label class="form-label" for="description">Description</label>
-                    <textarea class="form-control" type="text" name="campground[description]"
-                        id="description" required></textarea>
+                    <textarea class="form-control" type="text" name="campground[description]" id="description"
+                        required></textarea>
+                </div>
+
+                <!-- image -->
+
+                <div class="input-group mb-3">
+                    <input type="file" class="form-control" id="image" name="image" multiple>
+                    <label class="input-group-text" for="image">Upload</label>
                 </div>
 
                 <!-- bt submit -->
