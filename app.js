@@ -61,6 +61,7 @@ const session = require('express-session'); //botei o session aqui por que preci
 
 const MongoStore = require('connect-mongo');
 
+// o heroku manda o process.env.SECRET
 const secret = process.env.SECRET || 'istoeumsegredo';
 
 app.use(session({
@@ -257,8 +258,10 @@ app.use((err, req, res, next) => {
 
 
 /////////////////////////
-// Escutando a porta 8080
+// Escutando a porta
 /////////////////////////
-app.listen(8080, () => {
-    console.log('Serving on port 3000')
+const port = process.env.PORT || 8080// o heroku manda o .PORT
+
+app.listen(port, () => {
+    console.log(`Serving on port ${port}`)
 })
