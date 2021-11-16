@@ -49,14 +49,17 @@ Obs.: Todo projeto foi feito em conjunto com o instrutor através de seus tutori
 ## Preview
 
 <p align="center">
-    <img alt="Preview Login" src="preview/yelplogin.jpg" width="400px">
+    <img alt="Preview Home" src="preview/yelphome.jpg">
 </p>
 <p align="center">
-    <img alt="Preview Registro" src="preview/yelpregister.jpg" width="400px">
+    <img alt="Preview Login" src="preview/yelplogin.jpg">
 </p>
 <p align="center">
-    <img alt="Preview Novo Campground" src="preview/yelpnewcampground.jpg" width="400px">
+    <img alt="Preview Registro" src="preview/yelpregister.jpg">
 </p>
 <p align="center">
-    <img alt="Preview Mostrar Campground" src="preview/yelpshowcamp.jpg" width="400px">
+    <img alt="Preview Novo Campground" src="preview/yelpnewcampground.jpg">
+</p>
+<p align="center">
+    <img alt="Preview Mostrar Campground" src="preview/yelpshowcamp.jpg">
 </p>
